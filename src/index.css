@@ -1,3 +1,16 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  @font-face {
+    font-family: Sequl;
+    src: url('./resources/Sequel_Demo.ttf');
+  }
+  .modal_btn {
+    background-image: radial-gradient(#5765f1, rgba(210, 210, 210, 0.2));
+  }
+  .modal_btn:hover {
+    background-image: radial-gradient(#5765f1, rgba(210, 210, 210, 0.6));
+  }
+}
