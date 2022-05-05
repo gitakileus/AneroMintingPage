@@ -16,7 +16,7 @@ export default function MintingModal({
   }
 
   const decreaseAmount = () => {
-    setAmount(amount - 1 < 0 ? 0 : amount - 1)
+    setAmount(amount - 1 < 1 ? 1 : amount - 1)
   }
 
   const handleKeyEvent = (
@@ -30,7 +30,7 @@ export default function MintingModal({
     }
 
     if (event.code === 'ArrowDown') {
-      setAmount(amount - 1 < 0 ? 0 : amount - 1)
+      setAmount(amount - 1 < 1 ? 1 : amount - 1)
     }
   }
 
@@ -49,19 +49,19 @@ export default function MintingModal({
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <div className="fixed top-0 left-0 w-screen h-screen">
+      <div className="fixed top-0 left-0 w-screen h-screen text-white">
         <div
-          className="fixed w-screen h-screen top-0 left-0"
+          className="fixed w-screen h-screen top-0 left-0 bg-black bg-opacity-50"
           onClick={() => changeOpen(false)}
         ></div>
-        <div className="absolute top-0 md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 w-full md:max-w-[893px] md:rounded-2xl bg-white p-6 text-left shadow-xl transition-all">
+        <div className="absolute top-0 md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 w-full md:max-w-[893px] md:rounded-2xl bg-transparent  backdrop-blur-lg p-6 text-left shadow-xl transition-all border-2 border-white ">
           <div className="md:m-2">
             <div className="md:columns-2" onKeyDown={handleKeyEvent}>
               <div className="flex justify-center">
                 <img
                   src={image}
                   alt="art"
-                  className="w-[calc(100vw/1.3)] md:w-[406px] md:h-[405px]"
+                  className="w-[calc(100vw/1.3)] md:w-[406px] md:h-[405px] rounded-md"
                 ></img>
               </div>
               <form className="md:w-[375px] text-center">
@@ -80,7 +80,7 @@ export default function MintingModal({
                 <div className="mt-[calc(100vh/70)] md:mt-[15px] flex justify-center">
                   <div>
                     <input
-                      className="h-[calc(100vh/20)] md:h-[63.5px] w-[105px] border-black border focus:outline-none text-[calc(100vh/26)] leading-[calc(100vh/26)] md:text-[38px] md:leading-[48px] font-['Abel'] text-center"
+                      className="h-[calc(100vh/20)] md:h-[63.5px] w-[105px] border-black border focus:outline-none text-[calc(100vh/26)] leading-[calc(100vh/26)] md:text-[38px] md:leading-[48px] font-['Abel'] text-center text-black"
                       id="amount"
                       type="text"
                       name="amount"
@@ -106,7 +106,7 @@ export default function MintingModal({
                           width="51"
                           height="33"
                           id="img1"
-                          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAhCAMAAABDYWOIAAAAAXNSR0IB2cksfwAAADxQTFRFAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0C8mMAAAABR0Uk5TAECPv69gIP/fMO9/EM9wn5AfoIB+vb7kAAAAs0lEQVR4nJXUyQ7DIAxFUVNKoJQMLf//r82gIggGP+4uIkchXpiITT20fpqJP2SbtD1zBiYvb/+9xwmKCoKhG0FQRWSUEQeijJgwQygnRBAqCYTuBEA1ERFHBMSTLmqRDmqTJuqRBuoTFkmEQZOTSIGW4xkgBdoXi0JIjlaiDSIZ8kQaIxn6JOPkkvna0QIto0Tv16wXTb/jxwc/pM+BxBEyh2uKxsnvXvkY0uxVXIE2c4kfIkMbaKPyaRUAAAAASUVORK5CYII="
+                          href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAhAQMAAAChs2rHAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAA////pdmf3QAAAAJ0Uk5TAP9bkSK1AAAAdklEQVR4nIWOsREDIQwExRB8SAkuhdL40lzKl0BIwPjMnpxbM8wCYk9ERH3C1Vby9Ul2JYduU3qDIlmo0oSXZLGp79QzoO/mgLEuB2hWAoqeQgAHAmiOhY6S01nsuaPnNxPnDtyCy2cg2ePQ9Y8n58duMuPUji/IY3Hp3TPuYwAAAABJRU5ErkJggg=="
                         />
                       </defs>
                       <style></style>
