@@ -1,24 +1,14 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import MintingLayout from '../layouts/MintingLayout'
 import MintingModal from '../components/modal'
 
 import Bigimage from '../resources/background.png'
 import Smallimage from '../resources/background_small.png'
 
-import { Transition } from '@headlessui/react'
-
 export default function Minting() {
-  let [isOpen, setIsOpen] = useState(false)
-  // start button position
-  let [leftDis, setLeftDis] = useState(385)
-  let [topDis, setTopDis] = useState(505)
+  const [isOpen, setIsOpen] = useState(false)
 
-  useEffect(() => {
-    setLeftDis((385 / 1920) * window.innerWidth)
-    setTopDis((505 / 1920) * window.innerHeight)
-  })
-
-  function openModal() {
+  const openModal = () => {
     setIsOpen(true)
   }
 
@@ -37,7 +27,7 @@ export default function Minting() {
       <button
         type="button"
         className="absolute transition ease-in-out delay-150 bg-[#5765F1] hover:-translate-y-1  hover:bg-indigo-500 duration-300
-          hover:opacity-90 top-[135px] w-[250px] h-[60.5px] text-[20px] py-[16px] right-1/2 translate-x-1/2 md:translate-x-0 md:w-[275px] md:top-10 md:right-11 md:px-6 md:py-4 font-mono text-lg text-white leading-5 rounded-md"
+          hover:opacity-90 top-[calc(100vh/7.8)] w-[250px] h-[60.5px] text-[20px] py-[16px] right-1/2 translate-x-1/2 md:translate-x-0 md:w-[275px] md:top-10 md:right-11 md:px-6 md:py-4 font-mono text-lg text-white leading-5 rounded-md"
       >
         CONNECT YOUR WALLET
       </button>
@@ -46,23 +36,17 @@ export default function Minting() {
         onClick={() => {
           openModal()
         }}
-        className="transition duration-150 ease-in-out modal_btn absolute top-[427px] h-[39px] md:top-[605px] right-[0px]  md:right-[calc(100vw/5)] w-[170px] md:w-[96px] lg:w-[116px] lg:top-[355px] llg:top-[294px] llg:border-4 llg:w-[148px] llg:h-[28px] xl:w-[155px] xl:top-[418px]  xxl:w-[206px] xxl:top-[505px]  xl:h-[50px] italic font-[400] font-['Sequel 100 Black'] md:text-white border-4 md:border-8 border-[#5765F1] hover:border-[#3e49c5d0]"
+        className="transition ease-in-out modal_btn absolute top-[calc(100vh/2.31)] w-[calc(100vw/2.22)] h-[calc(100vh/20.6)] right-0 md:right-[calc(100vw/5)] md:top-[calc(100vh/2.13)] md:w-[calc(100vw/9.2)] md:h-[calc(100vh/21.6)] border-4 md:border-[6px] border-[#5765F1] hover:border-[#3e49c5d0] duration-200"
       >
-        <p className="transition duration-150 ease-in-out md:scale-x-[1.7] text-[22px] llg:text-[16px] llg:leading-[16px] xl:text-[20px] italic font-[400] font-['Sequel 100 Black'] text-white ">
+        <p className="transition delay-150 ease-in-out scale-x-[2] md:scale-x-[1.7] text-[calc(100vw/20)] leading-[calc(100vh/42.2)] md:text-[calc(100vw/78)] md:tracking-[calc(100vw/500)] italic font-[900] font-['Sequel 100 Black'] text-white hover:text-[22px] hover:leading-[calc(100vh/41)] duration-200">
           START
         </p>
       </button>
-      <Transition
-        show={isOpen}
-        enter="transition-opacity duration-300 delay-100"
-        enterFrom="opacity-0"
-        enterTo="opacity-100"
-        leave="transition-opacity duration-150"
-        leaveFrom="opacity-100"
-        leaveTo="opacity-0"
-      >
-        <MintingModal closeModal={() => setIsOpen(false)} />
-      </Transition>
+
+      <MintingModal
+        isOpen={isOpen}
+        changeOpen={(val: boolean) => setIsOpen(val)}
+      />
     </MintingLayout>
   )
 }

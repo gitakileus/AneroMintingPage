@@ -10,7 +10,6 @@ function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/mint" element={<Minting />} />
-        {/* <Route path='/mint' element={<MintingPage />} /> */}
       </Routes>
     </BrowserRouter>
   )
