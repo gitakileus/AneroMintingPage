@@ -9,6 +9,7 @@ export default function MintingModal({
   isOpen: boolean
   changeOpen: any
 }) {
+  const price = 0.3
   const [amount, setAmount] = useState(1)
 
   const increaseAmount = () => {
@@ -54,7 +55,7 @@ export default function MintingModal({
           className="fixed w-screen h-screen top-0 left-0 bg-black bg-opacity-50"
           onClick={() => changeOpen(false)}
         ></div>
-        <div className="absolute top-0 md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 w-full md:max-w-[893px] md:rounded-2xl bg-transparent  backdrop-blur-lg p-6 text-left shadow-xl transition-all border-2 border-white ">
+        <div className="absolute top-0 md:left-1/2 md:-translate-x-1/2 md:top-1/2 md:-translate-y-1/2 w-full md:max-w-[893px] md:rounded-2xl bg-transparent  backdrop-blur-lg p-6 text-left shadow-xl transition-all border-2 border-b-white md:border-white ">
           <div className="md:m-2">
             <div className="md:columns-2" onKeyDown={handleKeyEvent}>
               <div className="flex justify-center">
@@ -64,7 +65,7 @@ export default function MintingModal({
                   className="w-[calc(100vw/1.3)] md:w-[406px] md:h-[405px] rounded-md"
                 ></img>
               </div>
-              <form className="md:w-[375px] text-center">
+              <div className="md:w-[375px] text-center">
                 <p className="mt-[calc(100vh/60)] text-[calc(100vh/20)] md:mt-[8px] scale-x-[1.7] md:text-[38px] leading-[45px] italic font-[800] font-['Sequel 100 Black']">
                   1/7777
                 </p>
@@ -138,12 +139,19 @@ export default function MintingModal({
                     </svg>
                   </div>
                 </div>
-                <input
-                  type="submit"
-                  className="transition delay-100 duration-150 ease-in-out mt-[calc(100vh/60)] md:mt-[18px] w-[calc(100vw/1.2)] h-[calc(100vh/14)] md:w-full md:h-[80px] bg-[#5765F1] text-white rounded-2xl text-[calc(100vh/26)] leading-[calc(100vh/26)] md:text-[38px] md:leading-[38px] font-bold font-['Abel'] -bottom-[10px] appearance-none hover:bg-[#6c78ff] cursor-pointer"
-                  value="MINT"
-                />
-              </form>
+                <button
+                  type="button"
+                  className="group flex justify-center items-center relative mt-[calc(100vh/60)] md:mt-[18px] w-[calc(100vw/1.2)] h-[calc(100vh/14)] md:w-full md:h-[80px] bg-[#5765F1] text-white rounded-2xl text-[calc(100vh/26)] leading-[calc(100vh/26)] md:text-[38px] md:leading-[38px] font-bold font-['Abel'] -bottom-[10px] cursor-pointer overflow-hidden transition duration-200 ease-in-out hover:bg-[#5764f1dc]"
+                >
+                  MINT
+                  {/* NFT Art price */}
+                  <span className="ml-5 text-[calc(100vh/36)] leading-[calc(100vh/36)] md:text-[25px] md:leading-[25px]">
+                    ({(price * amount).toFixed(2)}ETH)
+                  </span>
+                  {/* shine box */}
+                  <div className="absolute top-0 -inset-full h-full w-1/2 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine" />
+                </button>
+              </div>
             </div>
           </div>
         </div>

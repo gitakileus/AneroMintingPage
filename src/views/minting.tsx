@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useRef, useState } from 'react'
 import MintingLayout from '../layouts/MintingLayout'
 import MintingModal from '../components/modal'
 
@@ -6,10 +6,12 @@ import Bigimage from '../resources/background.png'
 import Smallimage from '../resources/background_small.png'
 
 export default function Minting() {
+  let startRef = useRef<HTMLSpanElement>(null)
   const [isOpen, setIsOpen] = useState(false)
 
   const openModal = () => {
     setIsOpen(true)
+    startRef.current?.classList.remove('animate-ping')
   }
 
   return (
@@ -31,6 +33,7 @@ export default function Minting() {
       >
         CONNECT YOUR WALLET
       </button>
+
       <button
         type="button"
         onClick={() => {
@@ -38,14 +41,23 @@ export default function Minting() {
         }}
         className="group transition ease-in-out modal_btn absolute top-[calc(100vh/2.31)] w-[calc(100vw/2.22)] h-[calc(100vh/20.6)] right-0 md:right-[calc(100vw/5)] md:top-[calc(100vh/2.13)] md:w-[calc(100vw/9.2)] md:h-[calc(100vh/21.6)] border-4 md:border-[6px] border-[#5765F1] hover:border-[#3e49c5d0] duration-200"
       >
-        <p className="transition delay-150 ease-in-out scale-x-[2] md:scale-x-[1.7] text-[calc(100vw/20)] leading-[calc(100vh/42.2)] md:text-[calc(100vw/78)] md:tracking-[calc(100vw/500)] italic font-[900] font-['Sequel 100 Black'] text-white group-hover:text-[22px] group-hover:leading-[calc(100vh/41)] duration-200">
+        <p className="group transition delay-150 ease-in-out scale-x-[2] md:scale-x-[1.7] text-[calc(100vw/20)] leading-[calc(100vh/42.2)] md:text-[calc(100vw/78)] md:tracking-[calc(100vw/500)] italic font-[900] font-['Sequel 100 Black'] text-white group-hover:text-[22px] group-hover:leading-[calc(100vh/41)] duration-200">
           START
+          <span
+            className="absolute text-[#e9e9e9] left-1/4 animate-ping group-hover:animate-none group-hover:invisible group-active:invisible"
+            ref={startRef}
+          >
+            START
+          </span>
         </p>
       </button>
 
       <MintingModal
         isOpen={isOpen}
-        changeOpen={(val: boolean) => setIsOpen(val)}
+        changeOpen={(val: boolean) => {
+          setIsOpen(val)
+          startRef.current?.classList.add('animate-ping')
+        }}
       />
     </MintingLayout>
   )
