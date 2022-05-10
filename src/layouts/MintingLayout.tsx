@@ -1,6 +1,11 @@
+import Navbar from "../components/navbar"
+
 const MintingLayout = (props: mintingType) => {
   return (
-    <div className="relative h-screen overflow-x-hidden">{props.children}</div>
+    <div className="relative h-screen overflow-x-hidden">
+      <Navbar />  
+      {props.children}
+    </div>
   )
 }
 

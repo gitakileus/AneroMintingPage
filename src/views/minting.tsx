@@ -1,13 +1,103 @@
-import { useRef, useState } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import MintingLayout from '../layouts/MintingLayout'
 import MintingModal from '../components/modal'
 
 import Bigimage from '../resources/background.png'
 import Smallimage from '../resources/background_small.png'
+import {
+  SalePhase,
+  useContract,
+  useMaxSupply,
+  useMintDutchAuction,
+  useMintPublic,
+  useMintWhitelist,
+  useNFTPrice,
+  useSalePhase,
+  useTotalSupply,
+} from '../hook'
+import { useEtherBalance, useEthers } from '@usedapp/core'
+import { toast } from 'react-toastify'
+import { getWhiteListInfo } from '../utils/whitelist'
 
 export default function Minting() {
   let startRef = useRef<HTMLSpanElement>(null)
   const [isOpen, setIsOpen] = useState(false)
+
+  const { account, active, library } = useEthers()
+  const balance = useEtherBalance(account)
+  const totalCount = useMaxSupply()
+  const price = useNFTPrice()
+  const mintedCount = useTotalSupply()
+  const salePhase = useSalePhase()
+  console.log('salePhase: ', salePhase)
+  const { state: stateForMintNormal, send: mintNormal } = useMintPublic()
+  const {
+    state: stateForMintWhitelist,
+    send: mintWhitelist,
+  } = useMintWhitelist()
+  const {
+    state: stateForAuction,
+    send: mintDutchAuction,
+  } = useMintDutchAuction()
+
+  useEffect(() => {
+    if (stateForMintNormal) {
+      stateForMintNormal.status === 'Exception' &&
+        toast.error(stateForMintNormal.errorMessage)
+      stateForMintNormal.status === 'Success' && toast.success('Mint success!')
+    }
+    if (stateForMintWhitelist) {
+      stateForMintWhitelist.status === 'Exception' &&
+        toast.error(stateForMintWhitelist.errorMessage)
+      stateForMintWhitelist.status === 'Success' &&
+        toast.success('Mint success!')
+    }
+    if (stateForAuction) {
+      stateForAuction.status === 'Exception' &&
+        toast.error(stateForAuction.errorMessage)
+      stateForAuction.status === 'Success' && toast.success('Mint success!')
+    }
+  }, [stateForMintNormal, stateForMintWhitelist, stateForAuction])
+
+  const mintNow = async (count: number) => {
+    try {
+      if (!active || !account) {
+        toast.warning('Please connect your wallet!')
+        return
+      } else if (balance?.lt(price?.mul(count))) {
+        toast.error('Not enough ETH to mint!')
+        return
+      }
+
+      let result
+      if (salePhase === SalePhase.PreSale) {
+        const data = await getWhiteListInfo(account)
+        console.log('signature: ', data.signature)
+        if (!data.success) {
+          toast.warning('You are not Whitelist member.')
+          return
+        }
+        result = await mintWhitelist(count, data.signature, {
+          value: price.mul(count),
+        })
+      } else if (salePhase == SalePhase.AuctionSale) {
+        result = await mintDutchAuction(count, {
+          value: price.mul(count),
+        })
+      } else if (salePhase == SalePhase.PublicSale) {
+        result = await mintNormal(count, {
+          value: price.mul(count),
+        })
+      } else {
+        toast.warning('Sale is not started yet.')
+        return
+      }
+    } catch (err:any) {
+      const errStr = JSON.stringify(err)
+      toast.warning(err)
+      console.log('mintErr: ', errStr)
+    }
+  }
 
   const openModal = () => {
     setIsOpen(true)
@@ -26,13 +116,6 @@ export default function Minting() {
         alt="Background"
         className="h-screen w-screen -z-50 block md:hidden"
       />
-      <button
-        type="button"
-        className="absolute transition ease-in-out delay-150 bg-[#5765F1] hover:-translate-y-1  hover:bg-indigo-500 duration-300
-          hover:opacity-90 top-[calc(100vh/7.8)] w-[250px] h-[60.5px] text-[20px] py-[16px] right-1/2 translate-x-1/2 md:translate-x-0 md:w-[275px] md:top-10 md:right-11 md:px-6 md:py-4 font-mono text-lg text-white leading-5 rounded-md"
-      >
-        CONNECT YOUR WALLET
-      </button>
 
       <button
         type="button"
@@ -54,6 +137,10 @@ export default function Minting() {
 
       <MintingModal
         isOpen={isOpen}
+        onMint={mintNow}
+        price={price}
+        totalCount={totalCount}
+        mintedCount={mintedCount}
         changeOpen={(val: boolean) => {
           setIsOpen(val)
           startRef.current?.classList.add('animate-ping')

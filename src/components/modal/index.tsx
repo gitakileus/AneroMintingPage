@@ -1,15 +1,24 @@
 import { Transition } from '@headlessui/react'
+import { BigNumber, ethers } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import React, { useState } from 'react'
 import image from '../../resources/art.png'
 
 export default function MintingModal({
   isOpen,
   changeOpen,
+  onMint,
+  price,
+  totalCount,
+  mintedCount,
 }: {
   isOpen: boolean
   changeOpen: any
+  onMint: any
+  price: BigNumber
+  totalCount: BigNumber
+  mintedCount: BigNumber
 }) {
-  const price = 0.3
   const [amount, setAmount] = useState(1)
 
   const increaseAmount = () => {
@@ -50,7 +59,7 @@ export default function MintingModal({
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
     >
-      <div className="fixed top-0 left-0 w-screen h-screen text-white">
+      <div className="fixed top-0 left-0 w-screen h-screen text-white z-20">
         <div
           className="fixed w-screen h-screen top-0 left-0 bg-black bg-opacity-50"
           onClick={() => changeOpen(false)}
@@ -67,13 +76,14 @@ export default function MintingModal({
               </div>
               <div className="md:w-[375px] text-center">
                 <p className="mt-[calc(100vh/60)] text-[calc(100vh/20)] md:mt-[8px] scale-x-[1.7] md:text-[38px] leading-[45px] italic font-[800] font-['Sequel 100 Black']">
-                  1/7777
+                  {mintedCount.toNumber()}/{totalCount.toNumber()}
                 </p>
                 <p className="text-[28px] leading-[36px] font-['Abel']">
                   RIDERS
                 </p>
                 <p className="mt-[calc(1vh)] md:mt-[16px] text-[28px] leading-[36px] font-['Abel']">
-                  1 Rider = .3ETH
+                  1 Rider ={' '}
+                  {parseFloat(ethers.utils.formatEther(price)).toFixed(2)} ETH
                 </p>
                 <p className="mt-[calc(1vh)] md:mt-[47px]  text-[32px] leading-[40px] font-['Abel']">
                   How many?
@@ -85,6 +95,7 @@ export default function MintingModal({
                       id="amount"
                       type="text"
                       name="amount"
+                      autoComplete="off"
                       onChange={inputHandler}
                       value={amount}
                     />
@@ -141,12 +152,16 @@ export default function MintingModal({
                 </div>
                 <button
                   type="button"
+                  onClick={(e: any) => {
+                    e.preventDefault()
+                    onMint(amount)
+                  }}
                   className="group flex justify-center items-center relative mt-[calc(100vh/60)] md:mt-[18px] w-[calc(100vw/1.2)] h-[calc(100vh/14)] md:w-full md:h-[80px] bg-[#5765F1] text-white rounded-2xl text-[calc(100vh/26)] leading-[calc(100vh/26)] md:text-[38px] md:leading-[38px] font-bold font-['Abel'] -bottom-[10px] cursor-pointer overflow-hidden transition duration-200 ease-in-out hover:bg-[#5764f1dc]"
                 >
                   MINT
                   {/* NFT Art price */}
                   <span className="ml-5 text-[calc(100vh/36)] leading-[calc(100vh/36)] md:text-[25px] md:leading-[25px]">
-                    ({(price * amount).toFixed(2)}ETH)
+                    ({parseFloat(formatEther(price.mul(amount))).toFixed(2)}ETH)
                   </span>
                   {/* shine box */}
                   <div className="absolute top-0 -inset-full h-full w-1/2 block transform -skew-x-12 bg-gradient-to-r from-transparent to-white opacity-40 group-hover:animate-shine" />

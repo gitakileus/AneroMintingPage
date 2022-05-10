@@ -3,10 +3,21 @@ import ReactDOM from 'react-dom';
 
 import './index.css';
 import App from './App';
+import { Config, DAppProvider } from '@usedapp/core';
+import { NETWORK_ID, RPC_URL } from './config/config';
+
+const config: Config = {
+  readOnlyChainId: NETWORK_ID,
+  readOnlyUrls: {
+    [NETWORK_ID]: RPC_URL,
+  },
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <DAppProvider config={config}>
+      <App />
+    </DAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
